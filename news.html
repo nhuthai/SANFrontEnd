@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Newsfeed</title>
+	<!-- Compiled and minified CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/style.css">
+
+	<!-- Compiled and minified JavaScript -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+	
+
+	<script type="text/javascript" src="./js/cards.js"></script>
+</head>
+
+<body>
+	<nav>
+		<div class="nav-wrapper indigo accent-3 z-depth-3">
+			<h2 class="brand-logo">SocialEngine</h2>
+		</div>
+	</nav>
+	<select style="visibility: hidden" >
+
+	</select>
+	<div class="container" id="content">
+		<div class="card">
+			<div class="card-content">
+				<h4>Welcome to </h4>
+				<p>Here you can find out everything going on in your circle of friends.</p>
+			</div>
+		</div>
+		<div class="container" id='container'>
+
+		</div>
+	</div>
+	<script>
+        var users = [{userID : "US01", username : "John" , password : "1234", friends :["US02", "US04"]},
+            { userID : "US02", username : "Barcelona" , password : "5678",  friends :["US01", "US04"]},
+            { userID : "US03", username : "David" , password : "78910", friends :["US02", "US04"] },
+            { userID : "US04", username : "Henry" , password : "78910", friends :["US01"] },
+        ];
+        var post = [{postID: 1, ownerID: "US01", username: "John", content: "I'm feel really ", dateTime: "14/10/2017"},
+            {postID: 2, ownerID: "US02", username: "Barcelona",content: "B", dateTime: "13/10/2017"},
+            {postID: 3, ownerID: "US03", username: "David", content: "I'm feel really happy", dateTime: "15/10/2017"},
+            {postID: 4, ownerID: "US01", username: "John", content: " Talk about HackUPC", dateTime: "14/10/2017"},
+            {postID: 5, ownerID: "US04", username: "Henry", content: " It's quite difficult for submitting in short time", dateTime: "14/10/2017"},
+        ]
+        var comment = [{commentID: 1, postID: 1, commenderID: "US02", content: "Yup, me too", dateTime: "13/10/2017"},
+            {commentID: 2, postID: 1, commenderID: "US03", content: "Why i dont feel tired", dateTime: "13/10/2017"},
+            {commentID: 3, postID: 2, commenderID: "US01", content: "Test comment", dateTime: "13/10/2017"}]
+
+        var synth = window.speechSynthesis;
+
+        var inputForm = document.querySelector('form');
+        var inputTxt = "Hello";
+        var voiceSelect = document.querySelector('select');
+
+        var voices = [];
+
+        function get_Text(){
+            var newFeed = "";
+            if(users[0].userID == "US01"){
+                for(var p = 0; p < post.length; p++) {
+                    if (post[p].ownerID == "US01") {
+                        var div1 = document.createElement("div");
+                        div1.className += 'card';
+                        document.getElementById('container').appendChild(div1);
+                        var div2 = document.createElement("div");
+                        div2.className += 'card-content';
+                        div1.appendChild(div2);
+                        var header = document.createElement("h4");
+                        var header_text = document.createTextNode("News by " );
+                        header.appendChild(header_text);
+                        div2.appendChild(header);
+                        var strong = document.createElement("b");
+                        var strong_text = document.createTextNode(post[p].username);
+                        strong.appendChild(strong_text);
+                        header.appendChild(strong);
+                        var para = document.createElement("p");
+
+                        var para_text = document.createTextNode(post[p].content);
+                        para.appendChild(para_text);
+                        div2.appendChild(para);
+
+                        var date_text = document.createTextNode(post[p].dateTime);
+                        para.appendChild(date_text);
+
+                        newFeed += post[p].username + " says that " + post[p].content;
+                    } else if (post[p].ownerID == "US02" || post[p].ownerID == "US04") {
+                        var div1 = document.createElement("div");
+                        div1.className += 'card';
+                        document.getElementById('container').appendChild(div1);
+                        var div2 = document.createElement("div");
+                        div2.className += 'card-content';
+                        div1.appendChild(div2);
+                        var header = document.createElement("h4");
+                        var header_text = document.createTextNode("News by " );
+                        header.appendChild(header_text);
+                        div2.appendChild(header);
+                        var strong = document.createElement("b");
+                        var strong_text = document.createTextNode(post[p].username);
+                        strong.appendChild(strong_text);
+                        header.appendChild(strong);
+                        var para = document.createElement("p");
+                        var para_text = document.createTextNode(post[p].content);
+                        para.appendChild(para_text);
+                        div2.appendChild(para);
+                        var date_text = document.createTextNode(post[p].dateTime);
+                        para.appendChild(date_text);
+                        newFeed += post[p].username + " says that " + post[p].content;
+                    }
+                }
+            }
+            inputTxt = newFeed;
+        }
+
+        function populateVoiceList() {
+            voices = synth.getVoices();
+            var selectedIndex = voiceSelect.selectedIndex < 0 ? 0 : voiceSelect.selectedIndex;
+
+            for(i = 0; i < voices.length ; i++) {
+                var option = document.createElement('option');
+                option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
+
+                if(voices[i].default) {
+                    option.textContent += ' -- DEFAULT';
+                }
+
+                option.setAttribute('data-lang', voices[i].lang);
+                option.setAttribute('data-name', voices[i].name);
+                voiceSelect.appendChild(option);
+            }
+            voiceSelect.selectedIndex = selectedIndex;
+        }
+
+        populateVoiceList();
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = populateVoiceList;
+        }
+
+        function speak(){
+            if(inputTxt !== ''){
+                var utterThis = new SpeechSynthesisUtterance(inputTxt);
+                var selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
+                for(i = 0; i < voices.length ; i++) {
+                    if(voices[i].name === selectedOption) {
+                        utterThis.voice = voices[i];
+                    }
+                }
+                synth.speak(utterThis);
+            }
+        }
+
+        $(document).ready(function() {
+            get_Text();
+            speak()
+        })
+	</script>
+</body>
+</html>
