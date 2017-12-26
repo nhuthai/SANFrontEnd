@@ -1,0 +1,31 @@
+.nav-wrapper {
+	padding-left: 2vw;
+	padding-top: 2vh;
+	padding-bottom: 2vh;
+}
+
+.brand-logo {
+	margin: 0;
+}
+
+#content {
+	padding-top: 1.5vh;
+}
+
+#post {
+	margin-top: 5vh;
+}
+
+#send-bro {
+	position: absolute;
+	bottom: 3vh;
+	right: 3vh;
+}
+
+.btn-large {
+	width: 45%;
+}
+
+#content .row {
+	text-align: center;
+}
