@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<!-- Compiled and minified CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/style.css">
+
+	<!-- Compiled and minified JavaScript -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+	
+
+	<script type="text/javascript" src="./js/cards.js"></script>
+</head>
+<body onload="playMusic()">
+	<nav>
+		<div class="nav-wrapper indigo accent-3 z-depth-2">
+			<h2 class="brand-logo">SocialEngine</h2>
+		</div>
+	</nav>
+	<div class="container" id="content">
+		<div class="card">
+			<div class="card-content">
+				<h4>Welcome, Username</h4>
+				<p>It appears that you haven't set up your profile yet.</p>
+			</div>
+			<div class="card-action">
+				<a href="#">Let's go!</a>
+			</div>
+		</div>
+		<div class="row">
+			<a class="waves-effect waves-light btn-large" href="news.html">Newsfeed</a>
+			<a class="waves-effect waves-light btn-large" href="post.html">Post</a>
+		</div>
+	</div>
+	<script>
+        function playMusic() {
+            var audio = new Audio('welcome.ogg');
+            audio.play();
+
+            startDictation();
+        }
+
+        function startTranslate() {
+
+            if (window.hasOwnProperty('webkitSpeechRecognition')) {
+
+                var recognition = new webkitSpeechRecognition();
+
+                recognition.continuous = false;
+                recognition.interimResults = false;
+
+                recognition.lang = "en-US";
+                recognition.start();
+
+                recognition.onresult = function(e) {
+                    recognition.stop();
+                    travel(e.results[0][0].transcript);
+                };
+
+                recognition.onerror = function(e) {
+                    recognition.stop();
+                }
+
+            }
+        }
+
+        function travel(command) {
+            if (command == "one") {
+                window.location.href = "news.html";
+            }
+            else {
+                window.location.href = "posts.html";
+            }
+        }
+	</script>
+</body>
+</html>
+
